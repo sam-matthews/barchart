@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#
+# drop-database.sh
+# Sam Matthews
+# Drop Postgres database and user, including tables.
+#
+
+DBNAME=sam
+
+echo "Create Postgres Database"
+sudo -u postgres createdb ${DBNAME}
+
+ERR_STATUS=$?
+if [[ ${ERR_STATUS} -ne 0 ]]; then
+  echo "Error: $0: Error creating database."
+  exit 10
+fi
+
+
+
+

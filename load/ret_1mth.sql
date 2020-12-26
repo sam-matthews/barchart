@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION ret_one_day(dur_type IN VARCHAR) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION ret_1mth(dur_type IN VARCHAR) RETURNS VOID AS $$
 
 /*
 
@@ -30,6 +30,7 @@ BEGIN
 		-- This is how we define what stocks we choose. Typically based on some criteria. Weighted Alpha or 1 Moth performance or 1 week performance.
   	
 		day_of_week = date_part('dow', ref.prev_date);
+		raise notice 'Day of Week: %', day_of_week;
 
 		-- Determine what stocks should be invested.
 		IF (dur_type = 'week' AND day_of_week = 5) THEN
@@ -43,9 +44,11 @@ BEGIN
   			FROM barchart_data 
   			WHERE 1=1
   	  	  	  AND data_date = ref.prev_date
-			ORDER BY weighted_alpha::decimal DESC LIMIT 10;
+			ORDER BY perc_chg_1mth::decimal DESC LIMIT 10;
 
 		ELSIF dur_type = 'day' THEN
+
+			raise notice 'Updating stocks for the day.';
 	
 			TRUNCATE TABLE tmp_stocks_to_invest;
 
@@ -54,7 +57,7 @@ BEGIN
   			FROM barchart_data 
   			WHERE 1=1
   	  	  	  AND data_date = ref.prev_date
-			ORDER BY weighted_alpha::decimal DESC LIMIT 10;
+			ORDER BY perc_chg_1mth::decimal DESC LIMIT 10;
 
 		END IF;
 	

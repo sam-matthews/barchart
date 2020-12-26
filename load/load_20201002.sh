@@ -4,8 +4,11 @@
 # Sam Matthews
 # 26th October 2020
 
-START_DIR=${HOME}/Desktop/barchart/CSV
+echo "Running Pre SQL commands"
+psql -d barchart -f pre-implementation.sql
 
+START_DIR=${HOME}/Desktop/barchart/CSV
+BIN_HOME=${HOME}/dev/gh/barchart/load
 # for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
 for LONG_FILE in `ls -1 ${START_DIR}/*1[0-2]-[0-3][0-9]-2020*.csv`
 do
@@ -81,4 +84,6 @@ EOF
 done
 
 echo "Running One Off Commands"
-psql -d barchart -f post-implementation.sql
+psql -d barchart -f ${BIN_HOME}/post-implementation.sql
+
+psql -d barchart -f ${BIN_HOME}/validation.sql

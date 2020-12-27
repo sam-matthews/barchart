@@ -10,7 +10,11 @@ psql -d barchart -f pre-implementation.sql
 START_DIR=${HOME}/Desktop/barchart/CSV
 BIN_HOME=${HOME}/dev/gh/barchart/load
 # for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
-for LONG_FILE in `ls -1 ${START_DIR}/*1[0-2]-[0-3][0-9]-2020*.csv`
+
+echo "Loading ${LONG_FILE}." >> barchart.log
+
+for LONG_FILE in `ls -1 ${START_DIR}/watchlist-Stock-of-the-Day-[1][0-2]-[0-3][0-9]-2020*.csv`
+# for LONG_FILE in `ls -1 ${START_DIR}/*1[0-2]-[0-3][0-9]-2020*.csv`
 do
 	FILE=`basename "${LONG_FILE}"`
 	echo ${FILE}
@@ -22,7 +26,7 @@ do
 	echo CURRENT_DATE=${CURR_DATE}
 	# Load data into barchart stg table.
 
-	psql -d barchart << EOF
+	psql -d barchart << EOF >> barchart.log
 
 		TRUNCATE TABLE stg_20201002;
 
@@ -86,4 +90,25 @@ done
 echo "Running One Off Commands"
 psql -d barchart -f ${BIN_HOME}/post-implementation.sql
 
-psql -d barchart -f ${BIN_HOME}/validation.sql
+psql -d barchart -c "TRUNCATE TABLE summary"
+psql -d barchart -c "SELECT FROM ret_3mth('day',1)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',2)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',3)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',4)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',5)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',6)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',7)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',8)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',9)"
+psql -d barchart -c "SELECT FROM ret_3mth('day',10)"
+
+psql -d barchart -c "SELECT FROM ret_3mth('week',1)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',2)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',3)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',4)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',5)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',6)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',7)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',8)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',9)"
+psql -d barchart -c "SELECT FROM ret_3mth('week',10)"

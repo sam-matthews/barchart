@@ -1,9 +1,15 @@
 # Readme
-PostgreSQL related database application which will load those daily spreadsheets into the Postgres database.
 
-Firstly I have a series of bash scripts which will load the CSV files into a staging table and then into an Atomic table.
+WHO: Sam Matthews
+Created: 27th December 2020.
 
-Next we run various functions which will load data into temporary tables and run calculations, by grabbing the top x stocks, normally based on Weighted Alpha and using these stocks to work out the average for the next day.
+# Description
+This repository is a postgres database and shell script application. This repository will load CSV files downloaded from barchart.com. This application requires a certain CSV template, once loaded additional analysis on the data generated from barchart can be used.
 
-There are seperate functions for daily, weekly and monthly.
+Very simple and very usefull.
+
+# Changes
+
+27th December 2020
+------------------
 

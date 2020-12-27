@@ -17,9 +17,8 @@ DECLARE
 
 BEGIN
 
-  raise notice 'Duration Type: %', dur_type;
-
-  TRUNCATE TABLE ret_one_day;
+    raise notice 'Duration Type: %', dur_type;
+    raise notice 'Duration Period: %', stocks_to_choose;
 
 	FOR ref IN SELECT * FROM lkp_dates WHERE prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
 
@@ -65,8 +64,8 @@ BEGIN
   	-- We should be able to query this table to determine over performance of daily changes.
 	-- raise notice 'Loading data into: %', ref.data_date;
 
-  	INSERT INTO ret_one_day  
-  	SELECT b.symbol, b.data_date, b.weighted_alpha, b.perc_change_daily, b.perc_chg_3mth 
+  	INSERT INTO summary  
+  	SELECT b.symbol, b.data_date, '3-mth', dur_type, stocks_to_choose, b.perc_change_daily 
 	FROM barchart_data b 
   	WHERE 1=1
   	  AND b.data_date = ref.data_date 

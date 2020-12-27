@@ -10,6 +10,4 @@ Very simple and very usefull.
 
 # Changes
 
-27th December 2020
-------------------
-
+### 27th December 2020

@@ -13,5 +13,5 @@
 
 -- If there are any records returned then investigate.
 
-SELECT symbol, data_date FROM barchart_data GROUP BY symbol, data_date HAVING COUNT(*) > 1;
+SELECT symbol, data_date FROM barchart_data GROUP BY symbol, data_date HAVING COUNT(*) > 1 ORDER BY data_date DESC;
 

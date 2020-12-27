@@ -1,3 +1,4 @@
+# Readme
 PostgreSQL related database application which will load those daily spreadsheets into the Postgres database.
 
 Firstly I have a series of bash scripts which will load the CSV files into a staging table and then into an Atomic table.

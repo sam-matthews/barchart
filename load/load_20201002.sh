@@ -8,7 +8,7 @@ echo "Running Pre SQL commands"
 psql -d barchart -f pre-implementation.sql
 
 START_DIR=${HOME}/Desktop/barchart/CSV
-BIN_HOME=${HOME}/dev/gh/barchart/load
+BIN_HOME=${HOME}/dev/src/barchart/load
 # for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
 
 echo "Loading ${LONG_FILE}." >> barchart.log
@@ -112,3 +112,27 @@ psql -d barchart -c "SELECT FROM ret_3mth('week',7)"
 psql -d barchart -c "SELECT FROM ret_3mth('week',8)"
 psql -d barchart -c "SELECT FROM ret_3mth('week',9)"
 psql -d barchart -c "SELECT FROM ret_3mth('week',10)"
+
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',1)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',2)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',3)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',4)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',5)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',6)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',7)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',8)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',9)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('day',10)"
+
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',1)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',2)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',3)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',4)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',5)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',6)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',7)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',8)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',9)"
+psql -d barchart -c "SELECT FROM ret_weighted_alpha('week',10)"
+
+

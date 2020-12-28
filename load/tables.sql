@@ -132,7 +132,7 @@ DROP TABLE summary;
 CREATE TABLE summary(
   symbol		CHAR(10),
   curr_date		DATE,
-  ret_strategy  CHAR(10),
+  ret_strategy  CHAR(20),
   ret_type      CHAR(10),
   ret_period    CHAR(10),
   chg_1d		CHAR(10)

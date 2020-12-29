@@ -6,8 +6,8 @@
 
 START_DIR=${HOME}/Desktop/barchart/CSV
 
-# for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
-for LONG_FILE in `ls -1 ${START_DIR}/*09-0[8-9]-2020*.csv`
+for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
+# for LONG_FILE in `ls -1 ${START_DIR}/*09-0[8-9]-2020*.csv`
 do
 	FILE=`basename "${LONG_FILE}"`
 	echo ${FILE}

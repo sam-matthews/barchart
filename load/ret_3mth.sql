@@ -10,8 +10,8 @@ CREATE OR REPLACE FUNCTION ret_3mth(dur_type IN VARCHAR, stocks_to_choose IN INT
 DECLARE
 
   ref   RECORD;
-  date_start DATE := '04-06-2020';
-  date_stop  DATE := '31-12-2020';
+  date_start DATE := '12-02-2020';
+  date_stop  DATE := '31-12-2021';
 
   day_of_week INTEGER;
 
@@ -19,6 +19,12 @@ BEGIN
 
     raise notice 'Duration Type: %', dur_type;
     raise notice 'Duration Period: %', stocks_to_choose;
+
+    DELETE FROM summary 
+    WHERE 1=1
+      AND ret_strategy = '3-mth' 
+      AND ret_type = dur_type 
+      AND ret_period::integer = stocks_to_choose;
 
 	FOR ref IN SELECT * FROM lkp_dates WHERE prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
 

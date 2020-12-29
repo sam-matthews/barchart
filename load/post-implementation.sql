@@ -1,15 +1,16 @@
 
-UPDATE barchart_data
-SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,4)
-WHERE SUBSTR(perc_chg_1mth,5,1) = '%';
+-- Update perc_chg_1mth
+UPDATE barchart_data SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,4) WHERE SUBSTR(perc_chg_1mth,5,1) = '%';
+UPDATE barchart_data SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,5) WHERE SUBSTR(perc_chg_1mth,6,1) = '%';
+UPDATE barchart_data SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,6) WHERE SUBSTR(perc_chg_1mth,7,1) = '%';
 
-UPDATE barchart_data 
-SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,5)
-WHERE SUBSTR(perc_chg_1mth,6,1) = '%';
+UPDATE barchart_data SET perc_change_daily = SUBSTR(perc_change_daily,1,4) WHERE SUBSTR(perc_change_daily,5,1) = '%';
+UPDATE barchart_data SET perc_change_daily = SUBSTR(perc_change_daily,1,5) WHERE SUBSTR(perc_change_daily,6,1) = '%';
+UPDATE barchart_data SET perc_change_daily = SUBSTR(perc_change_daily,1,6) WHERE SUBSTR(perc_change_daily,7,1) = '%';
 
-UPDATE barchart_data 
-SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,6)
-WHERE SUBSTR(perc_chg_1mth,7,1) = '%';
+UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,4) WHERE SUBSTR(perc_chg_3mth,5,1) = '%';
+UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,5) WHERE SUBSTR(perc_chg_3mth,6,1) = '%';
+UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,6) WHERE SUBSTR(perc_chg_3mth,7,1) = '%';
 
 UPDATE barchart_data 
 SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,1) || SUBSTR(perc_chg_3mth,3,6)
@@ -27,7 +28,7 @@ TRUNCATE TABLE lkp_dates;
 INSERT INTO lkp_dates 
 	SELECT LAG(data_date,1) OVER (ORDER BY data_date ASC) AS prev_date, data_date 
 	FROM barchart_data 
-	WHERE symbol = 'ZM';
+	WHERE symbol = 'TSLA';
 
 -- Remove stocks originally loaded from staging CSV files. I have found that these stocks do not actually exist in Hatch and Stake.
 DELETE FROM barchart_data WHERE symbol IN ('ERI');

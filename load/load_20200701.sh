@@ -5,9 +5,11 @@
 # 26th October 2020
 
 START_DIR=${HOME}/Desktop/barchart/CSV
+BIN_HOME=${HOME}/dev/src/barchart/load
 
-for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
-# for LONG_FILE in `ls -1 ${START_DIR}/*09-01-2020*.csv`
+# for LONG_FILE in `ls -1 ${START_DIR}/*06-[0-3][0-9]-2020*.csv`
+# for LONG_FILE in `ls -1 ${START_DIR}/*02-[1-2][2-9]-2020*.csv`
+for LONG_FILE in `ls -1 ${START_DIR}/*08-[0-2][0-9]-2020*.csv`
 do
 	FILE=`basename "${LONG_FILE}"`
 	echo ${FILE}
@@ -21,10 +23,10 @@ do
 
 	psql -d barchart << EOF
 
-		TRUNCATE TABLE stg_20200604;
+		TRUNCATE TABLE stg_20200701;
 
 		-- INSERT INTO STG Table.
-		\copy stg_20200604 from $LONG_FILE DELIMITER ',' CSV HEADER
+		\copy stg_20200701 from $LONG_FILE DELIMITER ',' CSV HEADER
 
 		-- INSERT INTO ATOMIC TABLE.
 		INSERT INTO barchart_data
@@ -71,12 +73,17 @@ do
 			WHEN SUBSTR(chg_12m,1,1) = '-' THEN SUBSTR(chg_12m,1,LENGTH(chg_12m)-1) -- 
 			ELSE chg_12m
 		END chg_12m
-		FROM stg_20200604
+		FROM stg_20200701
 		EXCEPT 
 			SELECT symbol, data_date, last_price, weighted_alpha, perc_change_daily, perc_chg_week, perc_chg_1mth, perc_chg_3mth, perc_chg_6mth, perc_chg_year
 		 	FROM barchart_data
 		;
-
 EOF
 
 done
+
+echo "Running One Off Commands"
+psql -d barchart -f ${BIN_HOME}/post-implementation.sql
+
+
+

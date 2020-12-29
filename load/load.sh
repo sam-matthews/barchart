@@ -5,8 +5,9 @@
 # 26th October 2020
 
 START_DIR=${HOME}/Desktop/barchart/CSV
+BIN_HOME=${HOME}/dev/src/barchart/load
 
-for LONG_FILE in `ls -1 ${START_DIR}/*.csv`
+for LONG_FILE in `ls -1 ${START_DIR}/watchlist-Stock-of-the-Day-09-*.csv`
 do
 	FILE=`basename "${LONG_FILE}"`
 	echo ${FILE}
@@ -26,52 +27,62 @@ do
 		\copy stg from $LONG_FILE DELIMITER ',' CSV HEADER
 
 		-- INSERT INTO ATOMIC TABLE.
+			-- INSERT INTO ATOMIC TABLE.
 		INSERT INTO barchart_data
 		SELECT symbol, '$CURR_DATE', last_price,
 		CASE 
-			WHEN weighted_alpha = 'unch' THEN '0'
-			WHEN weighted_alpha = 'N/A' then '0' 
-			WHEN substr(weighted_alpha,1,1) = '+' THEN SUBSTR(weighted_alpha,2,LENGTH(weighted_alpha)-1) --remove +
-			ELSE weighted_alpha 
-		END weighted_alpha,
+			WHEN wtd_alpha = 'unch' THEN '0'
+			WHEN wtd_alpha = 'N/A' then '0' 
+			WHEN substr(wtd_alpha,1,1) = '+' THEN SUBSTR(wtd_alpha,2,LENGTH(wtd_alpha)-1) 
+			ELSE wtd_alpha 
+		END wtd_alpha,
 		CASE
-			WHEN perc_change_daily = 'unch' THEN '0'
-			WHEN substr(perc_change_daily,1,1) = '+' THEN SUBSTR(perc_change_daily,2,LENGTH(perc_change_daily)-2)
-			WHEN SUBSTR(perc_change_daily,1,1) = '-' THEN SUBSTR(perc_change_daily,1,LENGTH(perc_change_daily)-1)
-			ELSE perc_change_daily
-		END perc_change_daily,
+			WHEN chg_1d = 'unch' THEN '0'
+			WHEN substr(chg_1d,1,1) = '+' THEN SUBSTR(chg_1d,2,LENGTH(chg_1d)-2)
+			WHEN SUBSTR(chg_1d,1,1) = '-' THEN SUBSTR(chg_1d,1,LENGTH(chg_1d)-1)
+			ELSE chg_1d
+		END chg_1d,
 		CASE
-			WHEN perc_chg_week = 'unch' THEN '0'
-			WHEN substr(perc_chg_week,1,1) = '+' THEN SUBSTR(perc_chg_week,2,LENGTH(perc_chg_week)-2) -- remove +
-			WHEN SUBSTR(perc_chg_week,1,1) = '-' THEN SUBSTR(perc_chg_week,1,LENGTH(perc_chg_week)-1) -- 
-			ELSE perc_chg_week
-		END perc_chg_week,
+			WHEN chg_5d = 'unch' THEN '0'
+			WHEN substr(chg_5d,1,1) = '+' THEN SUBSTR(chg_5d,2,LENGTH(chg_5d)-2) -- remove +
+			WHEN SUBSTR(chg_5d,1,1) = '-' THEN SUBSTR(chg_5d,1,LENGTH(chg_5d)-1) -- 
+			ELSE chg_5d
+		END chg_5d,
 		CASE
-			WHEN perc_chg_1mth = 'unch' THEN '0'
-			WHEN substr(perc_chg_1mth,1,1) = '+' THEN SUBSTR(perc_chg_1mth,2,LENGTH(perc_chg_1mth)-2) -- remove +
-			WHEN SUBSTR(perc_chg_1mth,1,1) = '-' THEN SUBSTR(perc_chg_1mth,1,LENGTH(perc_chg_1mth)-1) -- 
-			ELSE perc_chg_1mth
-		END perc_chg_1mth,
+			WHEN chg_1m = 'unch' THEN '0'
+			WHEN substr(chg_1m,1,1) = '+' THEN SUBSTR(chg_1m,2,LENGTH(chg_1m)-2) -- remove +
+			WHEN SUBSTR(chg_1m,1,1) = '-' THEN SUBSTR(chg_1m,1,LENGTH(chg_1m)-1) -- 
+			ELSE chg_1m
+		END chg_1m,
 		CASE
-			WHEN perc_chg_3mth = 'unch' THEN '0'
-			WHEN substr(perc_chg_3mth,1,1) = '+' THEN SUBSTR(perc_chg_3mth,2,LENGTH(perc_chg_3mth)-2) -- remove +
-			WHEN SUBSTR(perc_chg_3mth,1,1) = '-' THEN SUBSTR(perc_chg_3mth,1,LENGTH(perc_chg_3mth)-1) -- 
-			ELSE perc_chg_3mth
-		END perc_chg_3mth,
+			WHEN chg_3m = 'unch' THEN '0'
+			WHEN substr(chg_3m,1,1) = '+' THEN SUBSTR(chg_3m,2,LENGTH(chg_3m)-2) -- remove +
+			WHEN SUBSTR(chg_3m,1,1) = '-' THEN SUBSTR(chg_3m,1,LENGTH(chg_3m)-1) -- 
+			ELSE chg_3m
+		END chg_3m,
 		CASE
-			WHEN perc_chg_6mth = 'unch' THEN '0'
-			WHEN substr(perc_chg_6mth,1,1) = '+' THEN SUBSTR(perc_chg_6mth,2,LENGTH(perc_chg_6mth)-2) -- remove +
-			WHEN SUBSTR(perc_chg_6mth,1,1) = '-' THEN SUBSTR(perc_chg_6mth,1,LENGTH(perc_chg_year)-1) -- 
-			ELSE perc_chg_6mth
-		END perc_chg_6mth,
+			WHEN chg_6m = 'unch' THEN '0'
+			WHEN substr(chg_6m,1,1) = '+' THEN SUBSTR(chg_6m,2,LENGTH(chg_6m)-2) -- remove +
+			WHEN SUBSTR(chg_6m,1,1) = '-' THEN SUBSTR(chg_6m,1,LENGTH(chg_6m)-1) -- 
+			ELSE chg_6m
+		END chg_6m,
 		CASE
-			WHEN perc_chg_year = 'unch' THEN '0'
-			WHEN substr(perc_chg_year,1,1) = '+' THEN SUBSTR(perc_chg_year,2,LENGTH(perc_chg_year)-2) -- remove +
-			WHEN SUBSTR(perc_chg_year,1,1) = '-' THEN SUBSTR(perc_chg_year,1,LENGTH(perc_chg_year)-1) -- 
-			ELSE perc_chg_year
-		END perc_chg_year
-		FROM stg;
+			WHEN chg_12m = 'unch' THEN '0'
+			WHEN substr(chg_12m,1,1) = '+' THEN SUBSTR(chg_12m,2,LENGTH(chg_12m)-2) -- remove +
+			WHEN SUBSTR(chg_12m,1,1) = '-' THEN SUBSTR(chg_12m,1,LENGTH(chg_12m)-1) -- 
+			ELSE chg_12m
+		END chg_12m
+		FROM stg
+		EXCEPT 
+		SELECT symbol, data_date, last_price, weighted_alpha, perc_change_daily, perc_chg_week, perc_chg_1mth, perc_chg_3mth, perc_chg_6mth, perc_chg_year
+		FROM barchart_data
+		;
+
 
 EOF
 
 done
+
+echo "Running One Off Commands"
+psql -d barchart -f ${BIN_HOME}/post-implementation.sql
+

@@ -38,7 +38,7 @@ BEGIN
 		-- raise notice 'Day of Week: %', day_of_week;
 
 		-- Determine what stocks should be invested.
-		IF (dur_type = 'week' AND day_of_week = 1) THEN
+		IF (dur_type = 'week' AND day_of_week = 5) THEN
 		
 			-- raise notice 'Updating stocks for the week.';
 		
@@ -80,6 +80,28 @@ BEGIN
 	-- raise notice '==============';
 
   END LOOP;
+
+  -- Now we have loaded the data we need into the summary table, we now just need to load this data into the average
+  -- table.
+
+  RAISE NOTICE 'Migrating to summary_return_average';
+
+  DELETE FROM summary_return_average 
+  WHERE 1=1
+    AND ret_strategy = '3-mth' 
+    AND ret_type = dur_type 
+    AND ret_period::integer = stocks_to_choose;
+
+  INSERT INTO summary_return_average
+  SELECT curr_date, ret_strategy, ret_type, ret_period, ROUND(AVG(chg_1d::decimal),4)
+  FROM summary
+  WHERE 1=1
+    AND ret_strategy = '3-mth'
+    AND ret_type = dur_type
+    AND ret_period::integer = stocks_to_choose
+  GROUP BY curr_date, ret_strategy, ret_type, ret_period;
+
+  PERFORM FROM calculate_running_total('3-mth', dur_type, stocks_to_choose);
 
 END;
 

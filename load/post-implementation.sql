@@ -63,6 +63,18 @@ SELECT FROM ret_3mth('week',8);
 SELECT FROM ret_3mth('week',9);
 SELECT FROM ret_3mth('week',10);
 
+SELECT FROM ret_3mth('month',1);
+SELECT FROM ret_3mth('month',2);
+SELECT FROM ret_3mth('month',3);
+SELECT FROM ret_3mth('month',4);
+SELECT FROM ret_3mth('month',5);
+SELECT FROM ret_3mth('month',6);
+SELECT FROM ret_3mth('month',7);
+SELECT FROM ret_3mth('month',8);
+SELECT FROM ret_3mth('month',9);
+SELECT FROM ret_3mth('month',10);
+
+
 SELECT FROM ret_weighted_alpha('day',1);
 SELECT FROM ret_weighted_alpha('day',2);
 SELECT FROM ret_weighted_alpha('day',3);
@@ -84,5 +96,16 @@ SELECT FROM ret_weighted_alpha('week',7);
 SELECT FROM ret_weighted_alpha('week',8);
 SELECT FROM ret_weighted_alpha('week',9);
 SELECT FROM ret_weighted_alpha('week',10);
+
+SELECT FROM ret_weighted_alpha('month',1);
+SELECT FROM ret_weighted_alpha('month',2);
+SELECT FROM ret_weighted_alpha('month',3);
+SELECT FROM ret_weighted_alpha('month',4);
+SELECT FROM ret_weighted_alpha('month',5);
+SELECT FROM ret_weighted_alpha('month',6);
+SELECT FROM ret_weighted_alpha('month',7);
+SELECT FROM ret_weighted_alpha('month',8);
+SELECT FROM ret_weighted_alpha('month',9);
+SELECT FROM ret_weighted_alpha('month',10);
 
 

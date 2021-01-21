@@ -4,6 +4,9 @@ CREATE OR REPLACE FUNCTION ret_3mth(dur_type IN VARCHAR, stocks_to_choose IN INT
 
 	analyze_type is one of the characterisics we use. Currently weighted_alpha or perc_chg_3mth.
 	dur_type is changing the list of stocks, daily or weekly.
+
+  -- Add month checks
+
 */
 
 
@@ -11,36 +14,72 @@ DECLARE
 
   ref   RECORD;
   date_start DATE := '12-02-2020';
-  date_stop  DATE := '31-12-2021';
+  date_stop  DATE := '05-04-2099';
 
   day_of_week INTEGER;
+  start_of_month BOOLEAN ;
+
+  loop_counter INTEGER;
 
 BEGIN
+  -- initialize.
+  loop_counter := 0;
 
-    raise notice 'Duration Type: %', dur_type;
-    raise notice 'Duration Period: %', stocks_to_choose;
+  raise notice 'Duration Type: %', dur_type;
+  raise notice 'Duration Period: %', stocks_to_choose;
 
-    DELETE FROM summary 
-    WHERE 1=1
-      AND ret_strategy = '3-mth' 
-      AND ret_type = dur_type 
-      AND ret_period::integer = stocks_to_choose;
+  DELETE FROM summary 
+  WHERE 1=1
+    AND ret_strategy = '3-mth' 
+    AND ret_type = dur_type 
+    AND ret_period::integer = stocks_to_choose;
 
 	FOR ref IN SELECT * FROM lkp_dates WHERE prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
 
-  		-- raise notice 'Prev Date: %', ref.prev_date;
-  		-- raise notice 'Curr Date: %', ref.data_date;
+    loop_counter := loop_counter + 1;
 
-  		-- Grab list of stocks from previous day and insert it into previous table.
-		-- This is how we define what stocks we choose. Typically based on some criteria. Weighted Alpha or 1 Moth performance or 1 week performance.
-  	
-		day_of_week = date_part('dow', ref.prev_date);
-		-- raise notice 'Day of Week: %', day_of_week;
+    -- Assume the first record is the first day of the month and therefore we collect data.
+    IF (loop_counter = 1) THEN 
+      start_of_month := 'true';
+    ELSE
+      start_of_month := 'false';
+    END IF;
 
-		-- Determine what stocks should be invested.
+    IF (EXTRACT(MONTH FROM ref.data_date)) > (EXTRACT(MONTH FROM ref.prev_date)) OR 
+       (EXTRACT(YEAR FROM ref.data_date))  > (EXTRACT(YEAR FROM ref.prev_date)) 
+    THEN
+      start_of_month := 'true';
+    ELSE 
+      start_of_month := 'false';
+    END IF;
+
+    raise notice '------------------';
+    raise notice 'Current date: %', ref.data_date;
+    raise notice 'Previous date: %', ref.prev_date;
+    raise notice 'Start of month: %', start_of_month;
+
+
+		-- Find day_of_week.
+    day_of_week = date_part('dow', ref.prev_date);
+		
+    IF (dur_type = 'month' AND start_of_month = 'true') THEN
+      raise notice 'Running Month analysis';
+      
+      TRUNCATE TABLE tmp_stocks_to_invest;
+
+      INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+              AND data_date = ref.prev_date
+      ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
+
+    -- Determine what stocks should be invested.
 		IF (dur_type = 'week' AND day_of_week = 5) THEN
 		
-			-- raise notice 'Updating stocks for the week.';
+			raise notice 'Updating stocks for the week.';
 		
 			TRUNCATE TABLE tmp_stocks_to_invest;
 
@@ -51,7 +90,10 @@ BEGIN
   	  	  	  AND data_date = ref.prev_date
 			ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
 
-		ELSIF dur_type = 'day' THEN
+    END IF;
+
+
+		IF (dur_type = 'day') THEN
 
 			-- raise notice 'Updating stocks for the day.';
 	
@@ -72,7 +114,7 @@ BEGIN
 
   	INSERT INTO summary  
   	SELECT b.symbol, b.data_date, '3-mth', dur_type, stocks_to_choose, b.perc_change_daily 
-	FROM barchart_data b 
+	  FROM barchart_data b 
   	WHERE 1=1
   	  AND b.data_date = ref.data_date 
   	  AND b.symbol IN (SELECT symbol FROM tmp_stocks_to_invest);

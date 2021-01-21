@@ -81,7 +81,7 @@ BEGIN
 
     DELETE FROM summary_return_average 
     WHERE 1=1
-        AND ret_strategy = '3-mth' 
+        AND ret_strategy = '1-mth' 
         AND ret_type = dur_type 
         AND ret_period::integer = stocks_to_choose;
 
@@ -89,12 +89,12 @@ BEGIN
     SELECT curr_date, ret_strategy, ret_type, ret_period, ROUND(AVG(chg_1d::decimal),4)
     FROM summary
     WHERE 1=1
-        AND ret_strategy = '3-mth'
+        AND ret_strategy = '1-mth'
         AND ret_type = dur_type
         AND ret_period::integer = stocks_to_choose
     GROUP BY curr_date, ret_strategy, ret_type, ret_period;
 
-    PERFORM FROM calculate_running_total('3-mth', dur_type, stocks_to_choose);
+    PERFORM FROM calculate_running_total('1-mth', dur_type, stocks_to_choose);
 
 END;
 

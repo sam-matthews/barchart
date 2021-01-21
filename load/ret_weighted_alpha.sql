@@ -18,8 +18,13 @@ DECLARE
   date_stop  DATE := '31-12-2029';
 
   day_of_week INTEGER;
+  start_of_month BOOLEAN ;
+
+  loop_counter INTEGER;
 
 BEGIN
+  -- initialize.
+  loop_counter := 0;
 
   raise notice 'Duration Type: %', dur_type;
   raise notice 'Duration Period: %', stocks_to_choose;
@@ -33,50 +38,92 @@ BEGIN
 
 	FOR ref IN SELECT * FROM lkp_dates WHERE prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
 
-  	-- Grab list of stocks from previous day and insert it into previous table.
-		-- This is how we define what stocks we choose. Typically based on some criteria. Weighted Alpha or 1 Moth performance or 1 week performance.
-  	
-		day_of_week = date_part('dow', ref.prev_date);
+  	loop_counter := loop_counter + 1;
 
-		-- Determine what stocks should be invested.
-		IF (dur_type = 'week' AND day_of_week = 5) THEN
-				
-			TRUNCATE TABLE tmp_stocks_to_invest;
+    -- Assume the first record is the first day of the month and therefore we collect data.
+    IF (loop_counter = 1) THEN 
+      start_of_month := 'true';
+    ELSE
+      start_of_month := 'false';
+    END IF;
 
-			INSERT INTO tmp_stocks_to_invest 
-  			SELECT symbol 
-  			FROM barchart_data 
-  			WHERE 1=1
-  	  	  	  AND data_date = ref.prev_date
-			ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
+    IF (EXTRACT(MONTH FROM ref.data_date)) > (EXTRACT(MONTH FROM ref.prev_date)) OR 
+       (EXTRACT(YEAR FROM ref.data_date))  > (EXTRACT(YEAR FROM ref.prev_date)) 
+    THEN
+      start_of_month := 'true';
+    ELSE 
+      start_of_month := 'false';
+    END IF;
 
-		ELSIF dur_type = 'day' THEN
+    raise notice '------------------';
+    raise notice 'Current date: %', ref.data_date;
+    raise notice 'Previous date: %', ref.prev_date;
+    raise notice 'Start of month: %', start_of_month;
 
-    TRUNCATE TABLE tmp_stocks_to_invest;
 
-		INSERT INTO tmp_stocks_to_invest 
-  		SELECT symbol 
-  		FROM barchart_data 
-  		WHERE 1=1
-  	  	AND data_date = ref.prev_date
-			ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
+    -- Find day_of_week.
+    day_of_week = date_part('dow', ref.prev_date);
+    
+    IF (dur_type = 'month' AND start_of_month = 'true') THEN
+      raise notice 'Running Month analysis';
+      
+      TRUNCATE TABLE tmp_stocks_to_invest;
 
-		END IF;
+      INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+              AND data_date = ref.prev_date
+      ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
+
+    -- Determine what stocks should be invested.
+    IF (dur_type = 'week' AND day_of_week = 5) THEN
+    
+      raise notice 'Updating stocks for the week.';
+    
+      TRUNCATE TABLE tmp_stocks_to_invest;
+
+      INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+              AND data_date = ref.prev_date
+      ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
+
+
+    IF (dur_type = 'day') THEN
+
+      raise notice 'Updating stocks for the day.';
+  
+      TRUNCATE TABLE tmp_stocks_to_invest;
+
+      INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+              AND data_date = ref.prev_date
+      ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
+
+
+	  -- Insert barchart data into return table.
+    -- We should be able to query this table to determine over performance of daily changes.
 	
-	-- Insert barchart data into return table.
-  -- We should be able to query this table to determine over performance of daily changes.
-	
-  INSERT INTO summary  
-  SELECT b.symbol, b.data_date, 'weighted_alpha', dur_type, stocks_to_choose, b.perc_change_daily 
-  FROM barchart_data b 
+    INSERT INTO summary  
+    SELECT b.symbol, b.data_date, 'weighted_alpha', dur_type, stocks_to_choose, b.perc_change_daily 
+    FROM barchart_data b 
     WHERE 1=1
       AND b.data_date = ref.data_date 
       AND b.symbol IN (SELECT symbol FROM tmp_stocks_to_invest);
 
-
   END LOOP;
 
-    RAISE NOTICE 'Migrating to summary_return_average';
+  RAISE NOTICE 'Migrating to summary_return_average';
 
   DELETE FROM summary_return_average 
   WHERE 1=1

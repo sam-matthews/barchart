@@ -39,6 +39,7 @@ BEGIN
       END wtd_alpha,
       CASE
         WHEN chg_1d = 'unch' THEN '0'
+        WHEN chg_1d = 'N/A' THEN '0'
         WHEN substr(chg_1d,1,1) = '+' THEN SUBSTR(chg_1d,2,LENGTH(chg_1d)-2)
         WHEN SUBSTR(chg_1d,1,1) = '-' THEN SUBSTR(chg_1d,1,LENGTH(chg_1d)-1)
         ELSE chg_1d

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION ret_3mth(
+CREATE OR REPLACE FUNCTION ret_1week(
   dur_type IN VARCHAR, 
   stocks_to_choose IN INTEGER,
   f_date_start IN DATE) RETURNS VOID AS $$
@@ -33,7 +33,7 @@ BEGIN
 
   DELETE FROM summary 
   WHERE 1=1
-    AND ret_strategy = '3-mth' 
+    AND ret_strategy = '1-week' 
     AND ret_type = dur_type 
     AND ret_period::integer = stocks_to_choose;
 
@@ -75,7 +75,7 @@ BEGIN
         FROM barchart_data 
         WHERE 1=1
               AND data_date = ref.prev_date
-      ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+      ORDER BY perc_chg_week::decimal DESC LIMIT stocks_to_choose;
 
     END IF;
 
@@ -91,7 +91,7 @@ BEGIN
   			FROM barchart_data 
   			WHERE 1=1
   	  	  	  AND data_date = ref.prev_date
-			ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+			ORDER BY perc_chg_week::decimal DESC LIMIT stocks_to_choose;
 
     END IF;
 
@@ -107,7 +107,7 @@ BEGIN
   			FROM barchart_data 
   			WHERE 1=1
   	  	  	  AND data_date = ref.prev_date
-			ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+			ORDER BY perc_chg_week::decimal DESC LIMIT stocks_to_choose;
 
 		END IF;
 	
@@ -116,7 +116,7 @@ BEGIN
 	-- raise notice 'Loading data into: %', ref.data_date;
 
   	INSERT INTO summary  
-  	SELECT b.symbol, b.data_date, '3-mth', dur_type, stocks_to_choose, b.perc_change_daily 
+  	SELECT b.symbol, b.data_date, '1-week', dur_type, stocks_to_choose, b.perc_change_daily 
 	  FROM barchart_data b 
   	WHERE 1=1
   	  AND b.data_date = ref.data_date 
@@ -133,7 +133,7 @@ BEGIN
 
   DELETE FROM summary_return_average 
   WHERE 1=1
-    AND ret_strategy = '3-mth' 
+    AND ret_strategy = '1-week' 
     AND ret_type = dur_type 
     AND ret_period::integer = stocks_to_choose;
 
@@ -141,12 +141,12 @@ BEGIN
   SELECT curr_date, ret_strategy, ret_type, ret_period, ROUND(AVG(chg_1d::decimal),4)
   FROM summary
   WHERE 1=1
-    AND ret_strategy = '3-mth'
+    AND ret_strategy = '1-week'
     AND ret_type = dur_type
     AND ret_period::integer = stocks_to_choose
   GROUP BY curr_date, ret_strategy, ret_type, ret_period;
 
-  PERFORM FROM calculate_running_total('3-mth', dur_type, stocks_to_choose);
+  PERFORM FROM calculate_running_total('1-week', dur_type, stocks_to_choose);
 
 END;
 

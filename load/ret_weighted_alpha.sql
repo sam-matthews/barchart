@@ -1,6 +1,7 @@
 CREATE OR REPLACE FUNCTION ret_weighted_alpha(
   dur_type IN VARCHAR, 
-  stocks_to_choose IN INTEGER
+  stocks_to_choose IN INTEGER,
+  f_date_start IN DATE
 ) RETURNS VOID AS $$
 
 /*
@@ -14,7 +15,7 @@ CREATE OR REPLACE FUNCTION ret_weighted_alpha(
 DECLARE
 
   ref   RECORD;
-  date_start DATE := '01-01-2020';
+  date_start DATE := f_date_start;
   date_stop  DATE := '31-12-2029';
 
   day_of_week INTEGER;

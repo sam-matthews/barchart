@@ -1,4 +1,7 @@
-CREATE OR REPLACE FUNCTION ret_1mth(dur_type IN VARCHAR, stocks_to_choose IN INTEGER) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION ret_1mth(
+  dur_type IN VARCHAR, 
+  stocks_to_choose IN INTEGER,
+  f_date_start IN DATE) RETURNS VOID AS $$
 
 /*
 
@@ -11,7 +14,7 @@ CREATE OR REPLACE FUNCTION ret_1mth(dur_type IN VARCHAR, stocks_to_choose IN INT
 DECLARE
 
   ref   RECORD;
-  date_start DATE := '12-02-2020';
+  date_start DATE := f_start_date;
   date_stop  DATE := '31-12-2021';
 
   f_ret_strategy CHAR(10) := '1-mth';

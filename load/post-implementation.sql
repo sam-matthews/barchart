@@ -31,6 +31,7 @@ UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,4) WHERE SUBST
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,5) WHERE SUBSTR(weighted_alpha,6,1) = '%';
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,6) WHERE SUBSTR(weighted_alpha,7,1) = '%';
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,2) || SUBSTR(weighted_alpha,4,6) WHERE SUBSTR(weighted_alpha,3,1) = ',';
+UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,1) || SUBSTR(weighted_alpha,3,6) WHERE SUBSTR(weighted_alpha,2,1) = ',';
 
 
 -- 6MTH UPDATES
@@ -51,137 +52,69 @@ INSERT INTO lkp_dates
 DELETE FROM barchart_data WHERE symbol IN ('ERI','TVIX','RTN','BGG','AMC');
 
 -- Calculate weighted_alpha and 3-mth strategies for day and week, 1-10 stocks.
-SELECT FROM ret_3mth('day',1,'16-02-2020');
-SELECT FROM ret_3mth('day',2,'16-02-2020');
-SELECT FROM ret_3mth('day',3,'16-02-2020');
-SELECT FROM ret_3mth('day',4,'16-02-2020');
-SELECT FROM ret_3mth('day',5,'16-02-2020');
-SELECT FROM ret_3mth('day',6,'16-02-2020');
-SELECT FROM ret_3mth('day',7,'16-02-2020');
-SELECT FROM ret_3mth('day',8,'16-02-2020');
-SELECT FROM ret_3mth('day',9,'16-02-2020');
-SELECT FROM ret_3mth('day',10,'16-02-2020');
+SELECT FROM ret_3mth('day',1);
+SELECT FROM ret_3mth('day',2);
+SELECT FROM ret_3mth('day',3);
+SELECT FROM ret_3mth('day',4);
+SELECT FROM ret_3mth('day',5);
+SELECT FROM ret_3mth('day',6);
+SELECT FROM ret_3mth('day',7);
+SELECT FROM ret_3mth('day',8);
+SELECT FROM ret_3mth('day',9);
+SELECT FROM ret_3mth('day',10);
 
-SELECT FROM ret_3mth('week',1,'16-02-2020');
-SELECT FROM ret_3mth('week',2,'16-02-2020');
-SELECT FROM ret_3mth('week',3,'16-02-2020');
-SELECT FROM ret_3mth('week',4,'16-02-2020');
-SELECT FROM ret_3mth('week',5,'16-02-2020');
-SELECT FROM ret_3mth('week',6,'16-02-2020');
-SELECT FROM ret_3mth('week',7,'16-02-2020');
-SELECT FROM ret_3mth('week',8,'16-02-2020');
-SELECT FROM ret_3mth('week',9,'16-02-2020');
-SELECT FROM ret_3mth('week',10,'16-02-2020');
+SELECT FROM ret_3mth('week',1);
+SELECT FROM ret_3mth('week',2);
+SELECT FROM ret_3mth('week',3);
+SELECT FROM ret_3mth('week',4);
+SELECT FROM ret_3mth('week',5);
+SELECT FROM ret_3mth('week',6);
+SELECT FROM ret_3mth('week',7);
+SELECT FROM ret_3mth('week',8);
+SELECT FROM ret_3mth('week',9);
+SELECT FROM ret_3mth('week',10);
 
-SELECT FROM ret_3mth('month',1,'16-02-2020');
-SELECT FROM ret_3mth('month',2,'16-02-2020');
-SELECT FROM ret_3mth('month',3,'16-02-2020');
-SELECT FROM ret_3mth('month',4,'16-02-2020');
-SELECT FROM ret_3mth('month',5,'16-02-2020');
-SELECT FROM ret_3mth('month',6,'16-02-2020');
-SELECT FROM ret_3mth('month',7,'16-02-2020');
-SELECT FROM ret_3mth('month',8,'16-02-2020');
-SELECT FROM ret_3mth('month',9,'16-02-2020');
-SELECT FROM ret_3mth('month',10,'16-02-2020');
-
-
-SELECT FROM ret_weighted_alpha('day',1,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',2,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',3,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',4,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',5,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',6,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',7,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',8,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',9,'16-02-2020');
-SELECT FROM ret_weighted_alpha('day',10,'16-02-2020');
-
-SELECT FROM ret_weighted_alpha('week',1,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',2,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',3,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',4,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',5,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',6,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',7,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',8,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',9,'16-02-2020');
-SELECT FROM ret_weighted_alpha('week',10,'16-02-2020');
-
-SELECT FROM ret_weighted_alpha('month',1,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',2,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',3,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',4,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',5,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',6,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',7,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',8,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',9,'16-02-2020');
-SELECT FROM ret_weighted_alpha('month',10,'16-02-2020');
-
-SELECT FROM ret_1mth('day',1,'16-02-2020');
-SELECT FROM ret_1mth('day',2,'16-02-2020');
-SELECT FROM ret_1mth('day',3,'16-02-2020');
-SELECT FROM ret_1mth('day',4,'16-02-2020');
-SELECT FROM ret_1mth('day',5,'16-02-2020');
-SELECT FROM ret_1mth('day',6,'16-02-2020');
-SELECT FROM ret_1mth('day',7,'16-02-2020');
-SELECT FROM ret_1mth('day',8,'16-02-2020');
-SELECT FROM ret_1mth('day',9,'16-02-2020');
-SELECT FROM ret_1mth('day',10,'16-02-2020');
-
-SELECT FROM ret_1mth('week',1,'16-02-2020');
-SELECT FROM ret_1mth('week',2,'16-02-2020');
-SELECT FROM ret_1mth('week',3,'16-02-2020');
-SELECT FROM ret_1mth('week',4,'16-02-2020');
-SELECT FROM ret_1mth('week',5,'16-02-2020');
-SELECT FROM ret_1mth('week',6,'16-02-2020');
-SELECT FROM ret_1mth('week',7,'16-02-2020');
-SELECT FROM ret_1mth('week',8,'16-02-2020');
-SELECT FROM ret_1mth('week',9,'16-02-2020');
-SELECT FROM ret_1mth('week',10,'16-02-2020');
-
-SELECT FROM ret_1mth('month',1,'16-02-2020');
-SELECT FROM ret_1mth('month',2,'16-02-2020');
-SELECT FROM ret_1mth('month',3,'16-02-2020');
-SELECT FROM ret_1mth('month',4,'16-02-2020');
-SELECT FROM ret_1mth('month',5,'16-02-2020');
-SELECT FROM ret_1mth('month',6,'16-02-2020');
-SELECT FROM ret_1mth('month',7,'16-02-2020');
-SELECT FROM ret_1mth('month',8,'16-02-2020');
-SELECT FROM ret_1mth('month',9,'16-02-2020');
-SELECT FROM ret_1mth('month',10,'16-02-2020');
-
-SELECT FROM ret_6mth('day',1,'16-02-2020');
-SELECT FROM ret_6mth('day',2,'16-02-2020');
-SELECT FROM ret_6mth('day',3,'16-02-2020');
-SELECT FROM ret_6mth('day',4,'16-02-2020');
-SELECT FROM ret_6mth('day',5,'16-02-2020');
-SELECT FROM ret_6mth('day',6,'16-02-2020');
-SELECT FROM ret_6mth('day',7,'16-02-2020');
-SELECT FROM ret_6mth('day',8,'16-02-2020');
-SELECT FROM ret_6mth('day',9,'16-02-2020');
-SELECT FROM ret_6mth('day',10,'16-02-2020');
-
-SELECT FROM ret_6mth('week',1,'16-02-2020');
-SELECT FROM ret_6mth('week',2,'16-02-2020');
-SELECT FROM ret_6mth('week',3,'16-02-2020');
-SELECT FROM ret_6mth('week',4,'16-02-2020');
-SELECT FROM ret_6mth('week',5,'16-02-2020');
-SELECT FROM ret_6mth('week',6,'16-02-2020');
-SELECT FROM ret_6mth('week',7,'16-02-2020');
-SELECT FROM ret_6mth('week',8,'16-02-2020');
-SELECT FROM ret_6mth('week',9,'16-02-2020');
-SELECT FROM ret_6mth('week',10,'16-02-2020');
-
-SELECT FROM ret_6mth('month',1,'16-02-2020');
-SELECT FROM ret_6mth('month',2,'16-02-2020');
-SELECT FROM ret_6mth('month',3,'16-02-2020');
-SELECT FROM ret_6mth('month',4,'16-02-2020');
-SELECT FROM ret_6mth('month',5,'16-02-2020');
-SELECT FROM ret_6mth('month',6,'16-02-2020');
-SELECT FROM ret_6mth('month',7,'16-02-2020');
-SELECT FROM ret_6mth('month',8,'16-02-2020');
-SELECT FROM ret_6mth('month',9,'16-02-2020');
-SELECT FROM ret_6mth('month',10,'16-02-2020');
+SELECT FROM ret_3mth('month',1);
+SELECT FROM ret_3mth('month',2);
+SELECT FROM ret_3mth('month',3);
+SELECT FROM ret_3mth('month',4);
+SELECT FROM ret_3mth('month',5);
+SELECT FROM ret_3mth('month',6);
+SELECT FROM ret_3mth('month',7);
+SELECT FROM ret_3mth('month',8);
+SELECT FROM ret_3mth('month',9);
+SELECT FROM ret_3mth('month',10);
 
 
+SELECT FROM ret_weighted_alpha('day',1);
+SELECT FROM ret_weighted_alpha('day',2);
+SELECT FROM ret_weighted_alpha('day',3);
+SELECT FROM ret_weighted_alpha('day',4);
+SELECT FROM ret_weighted_alpha('day',5);
+SELECT FROM ret_weighted_alpha('day',6);
+SELECT FROM ret_weighted_alpha('day',7);
+SELECT FROM ret_weighted_alpha('day',8);
+SELECT FROM ret_weighted_alpha('day',9);
+SELECT FROM ret_weighted_alpha('day',10);
+
+SELECT FROM ret_weighted_alpha('week',1);
+SELECT FROM ret_weighted_alpha('week',2);
+SELECT FROM ret_weighted_alpha('week',3);
+SELECT FROM ret_weighted_alpha('week',4);
+SELECT FROM ret_weighted_alpha('week',5);
+SELECT FROM ret_weighted_alpha('week',6);
+SELECT FROM ret_weighted_alpha('week',7);
+SELECT FROM ret_weighted_alpha('week',8);
+SELECT FROM ret_weighted_alpha('week',9);
+SELECT FROM ret_weighted_alpha('week',10);
+
+SELECT FROM ret_weighted_alpha('month',1);
+SELECT FROM ret_weighted_alpha('month',2);
+SELECT FROM ret_weighted_alpha('month',3);
+SELECT FROM ret_weighted_alpha('month',4);
+SELECT FROM ret_weighted_alpha('month',5);
+SELECT FROM ret_weighted_alpha('month',6);
+SELECT FROM ret_weighted_alpha('month',7);
+SELECT FROM ret_weighted_alpha('month',8);
+SELECT FROM ret_weighted_alpha('month',9);
+SELECT FROM ret_weighted_alpha('month',10);

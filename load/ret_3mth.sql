@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION ret_3mth(
   dur_type IN VARCHAR, 
-  stocks_to_choose IN INTEGER,
-  f_date_start IN DATE) RETURNS VOID AS $$
+  stocks_to_choose IN INTEGER)
+RETURNS VOID AS $$
 
 /*
 
@@ -16,7 +16,7 @@ CREATE OR REPLACE FUNCTION ret_3mth(
 DECLARE
 
   ref   RECORD;
-  date_start DATE := f_date_start;
+  date_start DATE ;
   date_stop  DATE := '05-04-2099';
 
   day_of_week INTEGER;
@@ -27,6 +27,8 @@ DECLARE
 BEGIN
   -- initialize.
   loop_counter := 0;
+
+  date_start := (current_date - interval '3 month');
 
   raise notice 'Duration Type: %', dur_type;
   raise notice 'Duration Period: %', stocks_to_choose;

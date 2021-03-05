@@ -28,8 +28,9 @@ BEGIN
   -- initialize.
   loop_counter := 0;
 
-  date_start := (current_date - interval '3 month');
-
+  -- date_start := (current_date - interval '3 month');
+  SELECT start_date INTO date_start FROM lkp_start_date;
+  
   raise notice 'Duration Type: %', dur_type;
   raise notice 'Duration Period: %', stocks_to_choose;
 

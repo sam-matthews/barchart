@@ -7,8 +7,6 @@
 CREATE EXTENTION file_fdw;
 CREATE SERVER srv_file_fdw FOREIGN DATA WRAPPER file_fdw;
 
-
-
 DROP FOREIGN TABLE stg2;
 CREATE FOREIGN TABLE stg2 (
 	symbol 		CHAR(10),

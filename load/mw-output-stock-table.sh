@@ -13,7 +13,7 @@
 
   psql -d barchart << EOF > /dev/null
 
-    -- SELECT mw_new('$fund');
+  SELECT mw();
 
   \COPY (SELECT \
     s_stock_date AS date, \
@@ -24,6 +24,6 @@
     s_stock_volume AS volume,\
     s_stock_adj_close AS adj_close\
   FROM s_stock)\
-  TO 'weighted_alpha-day-10.csv' WITH (FORMAT CSV , HEADER);
+  TO '3-mth-wk-8.csv' WITH (FORMAT CSV , HEADER);
 
 EOF

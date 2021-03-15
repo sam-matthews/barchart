@@ -33,6 +33,7 @@ BEGIN
 
     raise notice 'counter: %', counter;
     raise notice 'Date   : %', ref.p_date;
+    raise notice 'Price  : %', ref.p_price;
 
     -- If first record
     IF counter = 1 then

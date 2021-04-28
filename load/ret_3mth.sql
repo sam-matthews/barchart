@@ -20,13 +20,16 @@ DECLARE
   date_stop  DATE := '05-04-2099';
 
   day_of_week INTEGER;
-  start_of_month BOOLEAN ;
+  fortnight_counter INTEGER;
+  start_of_month BOOLEAN;
+  start_of_two_month BOOLEAN;
 
   loop_counter INTEGER;
 
 BEGIN
   -- initialize.
   loop_counter := 0;
+  fortnight_counter := 0;
 
   -- date_start := (current_date - interval '3 month');
   SELECT start_date INTO date_start FROM lkp_start_date;
@@ -59,6 +62,13 @@ BEGIN
       start_of_month := 'false';
     END IF;
 
+    IF ((EXTRACT(MONTH FROM ref.data_date) IN (2,4,6,8,10,12)) AND start_of_month = 'true')
+    THEN
+      start_of_two_month := 'true';
+    ELSE
+      start_of_two_month := 'false';
+    END IF;
+
     raise notice '------------------';
     raise notice 'Current date: %', ref.data_date;
     raise notice 'Previous date: %', ref.prev_date;
@@ -67,8 +77,24 @@ BEGIN
 
 		-- Find day_of_week.
     day_of_week = date_part('dow', ref.prev_date);
+
+    IF (dur_type = '2month' AND start_of_two_month)
+    THEN
+
+      raise notice 'Running 2xMonth analysis';
+      
+      TRUNCATE TABLE tmp_stocks_to_invest;
+
+      INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+              AND data_date = ref.prev_date
+      ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
 		
-    IF (dur_type = 'month' AND start_of_month = 'true') THEN
+    IF (dur_type = 'month' AND start_of_month) THEN
       raise notice 'Running Month analysis';
       
       TRUNCATE TABLE tmp_stocks_to_invest;
@@ -83,25 +109,46 @@ BEGIN
     END IF;
 
     -- Determine what stocks should be invested.
-		IF (dur_type = 'week' AND day_of_week = 5) THEN
+		IF (dur_type = '2week' AND day_of_week = 5) THEN
 		
-			raise notice 'Updating stocks for the week.';
-		
-			TRUNCATE TABLE tmp_stocks_to_invest;
-
-			INSERT INTO tmp_stocks_to_invest 
-  			SELECT symbol 
-  			FROM barchart_data 
-  			WHERE 1=1
-  	  	  	  AND data_date = ref.prev_date
-			ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+      fortnight_counter := fortnight_counter + 1;
 
     END IF;
 
+    IF (fortnight_counter = 2 AND dur_type = '2week' AND day_of_week = 5)
+    THEN
+        
+        RAISE NOTICE 'Updating stocks for the fortnight.';
+        TRUNCATE TABLE tmp_stocks_to_invest;
+
+        INSERT INTO tmp_stocks_to_invest 
+        SELECT symbol 
+        FROM barchart_data 
+        WHERE 1=1
+          AND data_date = ref.prev_date
+        ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+
+        fortnight_counter := 0;
+    END IF;
+
+    IF dur_type = 'week' AND day_of_week = 5
+    THEN
+
+      RAISE NOTICE 'Updating stocks for the week.';
+      TRUNCATE TABLE tmp_stocks_to_invest;
+
+      INSERT INTO tmp_stocks_to_invest 
+  		SELECT symbol 
+  		FROM barchart_data 
+  		WHERE 1=1
+        AND data_date = ref.prev_date
+      ORDER BY perc_chg_3mth::decimal DESC LIMIT stocks_to_choose;
+
+    END IF;
 
 		IF (dur_type = 'day') THEN
 
-			-- raise notice 'Updating stocks for the day.';
+			RAISE NOTICE 'Updating stocks for the day.';
 	
 			TRUNCATE TABLE tmp_stocks_to_invest;
 

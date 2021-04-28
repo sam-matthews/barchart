@@ -1,0 +1,40 @@
+#!/bin/zsh
+
+MW_HOME="${HOME}/dev/src/barchart"
+MW_BIN="${MW_HOME}/load"
+MW_SCR="${MW_BIN}/mw-output-stock-table.sh"
+
+
+${MW_SCR} "3-mth,day,1"
+${MW_SCR} "3-mth,day,2"
+${MW_SCR} "3-mth,day,3"
+${MW_SCR} "3-mth,day,4"
+${MW_SCR} "3-mth,day,5"
+${MW_SCR} "3-mth,day,6"
+${MW_SCR} "3-mth,day,7"
+${MW_SCR} "3-mth,day,8"
+${MW_SCR} "3-mth,day,9"
+${MW_SCR} "3-mth,day,10"
+
+${MW_SCR} "3-mth,week,1"
+${MW_SCR} "3-mth,week,2"
+${MW_SCR} "3-mth,week,3"
+${MW_SCR} "3-mth,week,4"
+${MW_SCR} "3-mth,week,5"
+${MW_SCR} "3-mth,week,6"
+${MW_SCR} "3-mth,week,7"
+${MW_SCR} "3-mth,week,8"
+${MW_SCR} "3-mth,week,9"
+${MW_SCR} "3-mth,week,10"
+
+${MW_SCR} "3-mth,month,1"
+${MW_SCR} "3-mth,month,2"
+${MW_SCR} "3-mth,month,3"
+${MW_SCR} "3-mth,month,4"
+${MW_SCR} "3-mth,month,5"
+${MW_SCR} "3-mth,month,6"
+${MW_SCR} "3-mth,month,7"
+${MW_SCR} "3-mth,month,8"
+${MW_SCR} "3-mth,month,9"
+${MW_SCR} "3-mth,month,10"
+

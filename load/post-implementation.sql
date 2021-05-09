@@ -41,6 +41,17 @@ UPDATE barchart_data SET perc_chg_6mth = SUBSTR(perc_chg_6mth,1,5) WHERE SUBSTR(
 UPDATE barchart_data SET perc_chg_6mth = SUBSTR(perc_chg_6mth,1,4) WHERE SUBSTR(perc_chg_6mth,5,1) = '%';
 UPDATE barchart_data SET perc_chg_6mth = SUBSTR(perc_chg_6mth,1,1) || SUBSTR(perc_chg_6mth,3,6) WHERE SUBSTR(perc_chg_6mth,2,1) = ',';
 
+
+-- Year Updates
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,4) WHERE SUBSTR(perc_chg_year,5,1) = '%';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,5) WHERE SUBSTR(perc_chg_year,6,1) = '%';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,6) WHERE SUBSTR(perc_chg_year,7,1) = '%';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,7) WHERE SUBSTR(perc_chg_year,8,1) = '%';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,8) WHERE SUBSTR(perc_chg_year,9,1) = '%';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,1) || SUBSTR(perc_chg_year,3,6) WHERE SUBSTR(perc_chg_year,2,1) = ',';
+UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,2) || SUBSTR(perc_chg_year,4,7) WHERE SUBSTR(perc_chg_year,3,1) = ',';
+
+
 --Update the lookup tables for dates.
 TRUNCATE TABLE lkp_dates;
 INSERT INTO lkp_dates 

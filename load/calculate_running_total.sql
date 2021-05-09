@@ -51,6 +51,7 @@ BEGIN
     END IF;
 
     RAISE NOTICE 'LOOP: %', loop_counter;
+    RAISE NOTICE 'DATE: %', ref.curr_date;
     RAISE NOTICE 'REF.CURRENT_RETURN: %', ref.current_return;
     RAISE NOTICE 'current running total: %', curr_running_total;
 

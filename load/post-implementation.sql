@@ -3,7 +3,6 @@ UPDATE barchart_data SET perc_chg_week = SUBSTR(perc_chg_week,1,6) WHERE SUBSTR(
 UPDATE barchart_data SET perc_chg_week = SUBSTR(perc_chg_week,1,7) WHERE SUBSTR(perc_chg_week,6,1) = '%';
 UPDATE barchart_data SET perc_chg_week = SUBSTR(perc_chg_week,1,8) WHERE SUBSTR(perc_chg_week,7,1) = '%';
 
-
 -- Update perc_chg_1mth
 UPDATE barchart_data SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,4) WHERE SUBSTR(perc_chg_1mth,5,1) = '%';
 UPDATE barchart_data SET perc_chg_1mth = SUBSTR(perc_chg_1mth,1,5) WHERE SUBSTR(perc_chg_1mth,6,1) = '%';
@@ -16,14 +15,19 @@ UPDATE barchart_data SET perc_change_daily = SUBSTR(perc_change_daily,1,6) WHERE
 UPDATE barchart_data SET perc_change_daily = SUBSTR(perc_change_daily,1,1) || SUBSTR(perc_change_daily,3,6) 
 WHERE SUBSTR(perc_change_daily,2,1) = ',';
 
-
-
 UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,4) WHERE SUBSTR(perc_chg_3mth,5,1) = '%';
 UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,5) WHERE SUBSTR(perc_chg_3mth,6,1) = '%';
 UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,6) WHERE SUBSTR(perc_chg_3mth,7,1) = '%';
 
+-- 3 MTH Updates
+
 UPDATE barchart_data 
 SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,1) || SUBSTR(perc_chg_3mth,3,6)
+WHERE SUBSTR(perc_chg_3mth,2,1) = ',';
+
+UPDATE barchart_data SET perc_chg_3mth = 0 WHERE perc_chg_3mth LIKE 'N/A%';
+
+UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,1) || SUBSTR(perc_chg_3mth,3,6) 
 WHERE SUBSTR(perc_chg_3mth,2,1) = ',';
 
 -- Weighted Alpha Updates
@@ -60,7 +64,13 @@ INSERT INTO lkp_dates
 	WHERE symbol = 'TSLA';
 
 -- Remove stocks originally loaded from staging CSV files. I have found that these stocks do not actually exist in Hatch and Stake.
-DELETE FROM barchart_data WHERE symbol IN ('ERI','TVIX','RTN','BGG','AMC');
+DELETE FROM barchart_data WHERE symbol IN (
+	'ERI',
+	'TVIX',
+	'RTN',
+	'BGG',
+	'GME',
+	'AMC');
 
 -- Calculate weighted_alpha and 3-mth strategies for day and week, 1-10 stocks.
 SELECT FROM ret_3mth('day',1);

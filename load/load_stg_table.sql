@@ -18,9 +18,9 @@ BEGIN
 
   INSERT INTO stg_file_type SELECT f_csv_file, 'stg1' FROM stg_file_type WHERE csv_file NOT IN (f_csv_file);
 
-  RAISE NOTICE 'STG Table: %', f_csv_file;
+  RAISE NOTICE 'STG File: %', f_csv_file;
   SELECT stg_file INTO stg_table FROM stg_file_type WHERE csv_file = f_csv_file;
-  RAISE NOTICE 'STG TABLE: %', stg_table;
+  RAISE NOTICE 'STG Table: %', stg_table;
 
 
 
@@ -46,24 +46,28 @@ BEGIN
       END chg_1d,
       CASE
         WHEN chg_5d = 'unch' THEN '0'
+        WHEN chg_5d = 'N/A' THEN '0'
         WHEN substr(chg_5d,1,1) = '+' THEN SUBSTR(chg_5d,2,LENGTH(chg_5d)-2) -- remove +
         WHEN SUBSTR(chg_5d,1,1) = '-' THEN SUBSTR(chg_5d,1,LENGTH(chg_5d)-1) -- 
         ELSE chg_5d
       END chg_5d,
       CASE
         WHEN chg_1m = 'unch' THEN '0'
-        WHEN substr(chg_1m,1,1) = '+' THEN SUBSTR(chg_1m,2,LENGTH(chg_1m)-2) -- remove +
+        WHEN chg_1m = 'N/A' THEN '0'
+        WHEN SUBSTR(chg_1m,1,1) = '+' THEN SUBSTR(chg_1m,2,LENGTH(chg_1m)-2) -- remove +
         WHEN SUBSTR(chg_1m,1,1) = '-' THEN SUBSTR(chg_1m,1,LENGTH(chg_1m)-1) -- 
         ELSE chg_1m
       END chg_1m,
       CASE
         WHEN chg_3m = 'unch' THEN '0'
+        WHEN chg_3m = 'N/A' THEN '0'
         WHEN substr(chg_3m,1,1) = '+' THEN SUBSTR(chg_3m,2,LENGTH(chg_3m)-2) -- remove +
         WHEN SUBSTR(chg_3m,1,1) = '-' THEN SUBSTR(chg_3m,1,LENGTH(chg_3m)-1) -- 
         ELSE chg_3m
       END chg_3m,
       CASE
         WHEN chg_6m = 'unch' THEN '0'
+        WHEN chg_6m = 'N/A' THEN '0'
         WHEN substr(chg_6m,1,1) = '+' THEN SUBSTR(chg_6m,2,LENGTH(chg_6m)-2) -- remove +
         WHEN SUBSTR(chg_6m,1,1) = '-' THEN SUBSTR(chg_6m,1,LENGTH(chg_6m)-1) -- 
         ELSE chg_6m

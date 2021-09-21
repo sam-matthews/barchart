@@ -10,10 +10,12 @@ DEF_STG_FILE=${START_DIR}/barchart-data-to-load.csv
 
 psql -d barchart -c "TRUNCATE TABLE barchart_data;"
 
+ls -lrt ${START_DIR}/watchlist-Stock-of-the-Day-*.csv
+
 for LONG_FILE in `ls -1 ${START_DIR}/watchlist-Stock-of-the-Day-*.csv`
 do
 	FILE=`basename "${LONG_FILE}"`
-	echo ${FILE}
+	echo "File to load - " ${FILE}
 
 	# Define correct date.
 	MTH=`echo "${FILE}" | cut -d '-' -f 6`

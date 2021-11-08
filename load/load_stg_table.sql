@@ -6,7 +6,6 @@ CREATE OR REPLACE FUNCTION load_stg_table(f_csv_file IN VARCHAR, f_stg_file_date
 
 */
 
-
 DECLARE
 
   ref       RECORD;
@@ -15,20 +14,19 @@ DECLARE
 BEGIN
 
   -- Check and insert current CSV file into CSVFILE lookup table.
-
+  RAISE NOTICE 'STEP 1. Check stage file being loaded is in stg_file_type.';
   INSERT INTO stg_file_type SELECT f_csv_file, 'stg1' FROM stg_file_type WHERE csv_file NOT IN (f_csv_file);
 
   RAISE NOTICE 'STG File: %', f_csv_file;
   SELECT stg_file INTO stg_table FROM stg_file_type WHERE csv_file = f_csv_file;
   RAISE NOTICE 'STG Table: %', stg_table;
 
-
-
   -- INSERT INTO ATOMIC TABLE.
   
   CASE stg_table
     WHEN 'stg1' THEN
 
+      RAISE NOTICE 'STARTING CASE STATEMENT FOR STG1 TABLE';
       INSERT INTO barchart_data
       SELECT symbol, f_stg_file_date, last_price,
       CASE 

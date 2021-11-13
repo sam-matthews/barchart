@@ -31,6 +31,7 @@ UPDATE barchart_data SET perc_chg_3mth = SUBSTR(perc_chg_3mth,1,1) || SUBSTR(per
 WHERE SUBSTR(perc_chg_3mth,2,1) = ',';
 
 -- Weighted Alpha Updates
+
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,4) WHERE SUBSTR(weighted_alpha,5,1) = '%';
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,5) WHERE SUBSTR(weighted_alpha,6,1) = '%';
 UPDATE barchart_data SET weighted_alpha = SUBSTR(weighted_alpha,1,6) WHERE SUBSTR(weighted_alpha,7,1) = '%';
@@ -55,7 +56,6 @@ UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,8) WHERE SUBSTR(
 UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,1) || SUBSTR(perc_chg_year,3,6) WHERE SUBSTR(perc_chg_year,2,1) = ',';
 UPDATE barchart_data SET perc_chg_year = SUBSTR(perc_chg_year,1,2) || SUBSTR(perc_chg_year,4,7) WHERE SUBSTR(perc_chg_year,3,1) = ',';
 
-
 --Update the lookup tables for dates.
 TRUNCATE TABLE lkp_dates;
 INSERT INTO lkp_dates 
@@ -63,7 +63,9 @@ INSERT INTO lkp_dates
 	FROM barchart_data 
 	WHERE symbol = 'TSLA';
 
--- Remove stocks originally loaded from staging CSV files. I have found that these stocks do not actually exist in Hatch and Stake.
+INSERT INTO lkp_start_date VALUES('28-02-2020');
+
+-- Remove stocks originally loaded from staging CSV files. I have found that these stocks do not actually exist in Hatch and Stake or are incredibly meme in nature.
 DELETE FROM barchart_data WHERE symbol IN (
 	'ERI',
 	'TVIX',

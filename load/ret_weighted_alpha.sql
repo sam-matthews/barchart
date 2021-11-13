@@ -37,7 +37,7 @@ BEGIN
     AND ret_period::integer = stocks_to_choose
   ; 
 
-	FOR ref IN SELECT * FROM lkp_dates WHERE prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
+	FOR ref IN SELECT * FROM lkp_dates WHERE lkp_prev_date BETWEEN date_start AND date_stop ORDER BY 1 LOOP
 
   	loop_counter := loop_counter + 1;
 
@@ -48,8 +48,8 @@ BEGIN
       start_of_month := 'false';
     END IF;
 
-    IF (EXTRACT(MONTH FROM ref.data_date)) > (EXTRACT(MONTH FROM ref.prev_date)) OR 
-       (EXTRACT(YEAR FROM ref.data_date))  > (EXTRACT(YEAR FROM ref.prev_date)) 
+    IF (EXTRACT(MONTH FROM ref.lkp_data_date)) > (EXTRACT(MONTH FROM ref.lkp_prev_date)) OR 
+       (EXTRACT(YEAR FROM ref.lkp_data_date))  > (EXTRACT(YEAR FROM ref.lkp_prev_date)) 
     THEN
       start_of_month := 'true';
     ELSE 
@@ -57,13 +57,15 @@ BEGIN
     END IF;
 
     raise notice '------------------';
-    raise notice 'Current date: %', ref.data_date;
-    raise notice 'Previous date: %', ref.prev_date;
+    raise notice 'Duration Type:  %', dur_type;
+    raise notice 'Stocks in list: %', stocks_to_choose;
+    raise notice 'Current date:   %', ref.lkp_data_date;
+    raise notice 'Previous date:  %', ref.lkp_prev_date;
     raise notice 'Start of month: %', start_of_month;
 
 
     -- Find day_of_week.
-    day_of_week = date_part('dow', ref.prev_date);
+    day_of_week = date_part('dow', ref.lkp_prev_date);
     
     IF (dur_type = 'month' AND start_of_month = 'true') THEN
       raise notice 'Running Month analysis';
@@ -74,7 +76,7 @@ BEGIN
         SELECT symbol 
         FROM barchart_data 
         WHERE 1=1
-              AND data_date = ref.prev_date
+              AND data_date = ref.lkp_prev_date
       ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
 
     END IF;
@@ -90,7 +92,7 @@ BEGIN
         SELECT symbol 
         FROM barchart_data 
         WHERE 1=1
-              AND data_date = ref.prev_date
+              AND data_date = ref.lkp_prev_date
       ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
 
     END IF;
@@ -106,7 +108,7 @@ BEGIN
         SELECT symbol 
         FROM barchart_data 
         WHERE 1=1
-              AND data_date = ref.prev_date
+              AND data_date = ref.lkp_prev_date
       ORDER BY weighted_alpha::decimal DESC LIMIT stocks_to_choose;
 
     END IF;
@@ -119,7 +121,7 @@ BEGIN
     SELECT b.symbol, b.data_date, 'weighted_alpha', dur_type, stocks_to_choose, b.perc_change_daily 
     FROM barchart_data b 
     WHERE 1=1
-      AND b.data_date = ref.data_date 
+      AND b.data_date = ref.lkp_data_date 
       AND b.symbol IN (SELECT symbol FROM tmp_stocks_to_invest);
 
   END LOOP;

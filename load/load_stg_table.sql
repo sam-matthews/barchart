@@ -17,10 +17,8 @@ BEGIN
   RAISE NOTICE 'STEP 1. Check stage file being loaded is in stg_file_type.';
   INSERT INTO stg_file_type SELECT f_csv_file, 'stg1' FROM stg_file_type WHERE csv_file NOT IN (f_csv_file);
 
-  RAISE NOTICE 'STG File: %', f_csv_file;
   SELECT stg_file INTO stg_table FROM stg_file_type WHERE csv_file = f_csv_file;
-  RAISE NOTICE 'STG Table: %', stg_table;
-
+  
   -- INSERT INTO ATOMIC TABLE.
   
   CASE stg_table

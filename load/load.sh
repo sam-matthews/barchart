@@ -39,14 +39,12 @@ EOF
 
 done
 
-exit 10
-
 echo "Running One Off Commands"
-psql -d barchart -f ${BIN_HOME}/post-implementation.sql
+psql -d barchart -f ${BARCHART_BIN}/post-implementation.sql
 
 # echo "Running summary"
 # psql -d barchart -f ${BIN_HOME}/summary.sql
 
 echo "Generate CSV files to be loaded into Motive Wave"
 
-${BIN_HOME}/mw-all.sh
+# ${BIN_HOME}/mw-all.sh

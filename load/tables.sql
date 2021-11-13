@@ -27,6 +27,17 @@ CREATE TABLE stg_file_type (
 
 CREATE INDEX stg_file_type_n1 ON stg_file_type(csv_file);
 
+DROP TABLE lkp_dates;
+CREATE TABLE lkp_dates(
+  lkp_prev_date DATE, 
+  lkp_data_date DATE
+);
+
+DROP TABLE lkp_start_date;
+CREATE TABLE lkp_start_date(
+  start_date DATE
+);
+
 DROP TABLE summary;
 CREATE TABLE summary(
   symbol		CHAR(10),
@@ -35,6 +46,21 @@ CREATE TABLE summary(
   ret_type      CHAR(10),
   ret_period    CHAR(10),
   chg_1d		CHAR(10)
+);
+
+DROP TABLE summary_return_average;
+CREATE TABLE summary_return_average(
+  curr_date       DATE,
+  ret_strategy    CHAR(20),
+  ret_type        CHAR(20),
+  ret_period      CHAR(20),
+  current_return  DECIMAL,
+  running_total   CHAR(20)
+);
+
+DROP TABLE tmp_stocks_to_invest;
+CREATE TABLE tmp_stocks_to_invest(
+  symbol  CHAR(10)
 );
 
 DROP TABLE ret_one_day;

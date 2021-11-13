@@ -1,6 +1,6 @@
 -- Create as superuser such as postgres user.
 -- Created for entire cluster.
--- CREATE EXTENSION file_fdw;
+CREATE EXTENSION file_fdw;
 
 CREATE SERVER srv_file_fdw FOREIGN DATA WRAPPER file_fdw;
 

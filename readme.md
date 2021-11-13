@@ -17,3 +17,7 @@ Very simple and very useful.
 
 3. Added multiple entries to load script, this now means all the current data is updated, meaning updating spreadsheet becomes much much easier.
 
+
+## 13th November 2021
+
+When creating the original application, there looks to be a bit of missing structures which is important when I move from one peice of hardware to another. THis change will ensure these are updated correctly and rebuilding becomes easier.
